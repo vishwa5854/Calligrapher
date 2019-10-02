@@ -5,7 +5,6 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -67,12 +66,12 @@ class Input {
                     continue;
                 }
                 int[][] test = new int[countTillZeroRow(temp)][temp[0].length];
-                for(int a =0;a<test.length;a++){
-                    System.arraycopy(temp[a],0,test[a],0,test[a].length);
+                for (int a = 0; a < test.length; a++) {
+                    System.arraycopy(temp[a], 0, test[a], 0, test[a].length);
                 }
-                this.data.put(indexForKey++,rotatePictureAntiClockWise(test));
+                this.data.put(indexForKey++, rotatePictureAntiClockWise(test));
                 countForTemp = 0;
-                temp = new int[allAlphabet[0].length/60][allAlphabet.length];
+                temp = new int[allAlphabet[0].length / 60][allAlphabet.length];
             }
         }
         writeHashMap();
@@ -121,8 +120,8 @@ class Input {
     private void writeHashMap(){
         Set<Integer> keys = this.data.keySet();
         for(int a : keys){
-            System.out.println(a);
-            System.out.println(Arrays.deepToString(data.get(a)));
+            //System.out.println(a);
+            //System.out.println(Arrays.deepToString(data.get(a)));
             BufferedImage write = new BufferedImage(data.get(a)[0].length,data.get(a).length, 5);
             for(int i=0;i<data.get(a).length;i++){
                 for(int j=0;j<data.get(a)[0].length;j++){
@@ -154,4 +153,7 @@ class Input {
         return result;
     }
 
+    HashMap<Integer , int[][]> returnData(){
+        return this.data;
+    }
 }

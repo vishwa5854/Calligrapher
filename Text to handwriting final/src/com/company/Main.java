@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 
 public class Main {
 
@@ -18,6 +19,8 @@ public class Main {
             }
         }
         writeFinalGeneratedImage(write);
+        HashMap<Integer , int[][]> data = input.returnData();
+        GenerateHandwriting handwriting = new GenerateHandwriting("test1",data);
     }
 
     private static void writeFinalGeneratedImage(BufferedImage writeImage) {
