@@ -21,8 +21,8 @@ class Read {
         } catch (IOException e) {
             System.out.println("Could't Read the Given input Image ");
         }
-        int[][] pixelRequired = new int[Objects.requireNonNull(bufferedImage).getHeight()][bufferedImage.getWidth()];
         int[][] pixelBW = generateBlackAndWhite(fileName);
+        int[][] pixelRequired = new int[Objects.requireNonNull(bufferedImage).getHeight()][bufferedImage.getWidth()];
         for(int i=0;i<pixelRequired.length;i++){
             for(int j=0;j<pixelRequired[0].length;j++){
                 if(pixelBW[i][j] != -1){

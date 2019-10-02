@@ -1,24 +1,31 @@
 package com.company;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Set;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Input input = new Input("caps.png","small.png","num.png");
-        HashMap<Character,int[][]> data= input.returnData();
+        BufferedImage read = ImageIO.read(new File("C:\\Users\\vishwanath\\Pictures\\Hand Writing Project\\caps.png"));
         input.splitTheDataIntoHashMap();
-        Set<Character> keys = data.keySet();
-        for(char a : keys){
-            System.out.println(Arrays.deepToString(data.get(a)));
-        }
+        BufferedImage write = new BufferedImage(input.allAlphabet[0].length,input.allAlphabet.length ,read.getType());
         for(int i=0;i<input.allAlphabet.length;i++){
             for(int j=0;j<input.allAlphabet[0].length;j++){
-                System.out.print(input.allAlphabet[i][j]);
+                write.setRGB(j,i,input.allAlphabet[i][j]);
             }
-            System.out.println();
+        }
+        writeFinalGeneratedImage(write);
+    }
+
+    private static void writeFinalGeneratedImage(BufferedImage writeImage) {
+        File writer = new File("C:\\Users\\vishwanath\\Pictures\\Hand Writing Project\\" + "lol" + ".png");
+        try {
+            ImageIO.write(writeImage,"png",writer);
+        } catch (IOException e) {
+            System.out.println("Failed to write the image into destination path ");
         }
     }
 }
