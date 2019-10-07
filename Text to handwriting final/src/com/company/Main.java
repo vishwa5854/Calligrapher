@@ -20,7 +20,7 @@ public class Main {
         }
         writeFinalGeneratedImage(write);
         HashMap<Integer , int[][]> data = input.returnData();
-        GenerateHandwriting handwriting = new GenerateHandwriting("test1",data);
+        GenerateHandwriting handwriting = new GenerateHandwriting("test",data);
     }
 
     private static void writeFinalGeneratedImage(BufferedImage writeImage) {

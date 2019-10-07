@@ -69,7 +69,7 @@ class GenerateHandwriting {
     }
 
     private void copyCharacterIntoArray(int[][] input , int start, int[][] output){
-        for(int i=start;i<input.length;i++){
+        for(int i=0;i<input.length;i++){
             System.arraycopy(input[i],0,output[i],start,input[i].length);
         }
     }
