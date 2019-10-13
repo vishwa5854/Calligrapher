@@ -1,12 +1,7 @@
 package com.company;
 
-
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.Set;
 
 /*This class is all about reading the input from the
 * user in the format of pictures and then store then in an array
@@ -15,41 +10,23 @@ import java.util.Set;
 
 class Input {
     private HashMap<Integer , int[][]> data;
-    private int[][] capitalLetters;
-    private int[][] smallLetters;
-    private int[][] numbersAndSpecialCharacters;
-    int[][] allAlphabet;
 
 
     Input(String fC , String fS, String fN){
         data = new HashMap<>();
         Read read = new Read();
-        this.capitalLetters = read.readDataFromPicture(fC);
-        this.smallLetters = read.readDataFromPicture(fS);
-        this.numbersAndSpecialCharacters = read.readDataFromPicture(fN);
-        this.allAlphabet = new int[smallLetters.length][capitalLetters[0].length + smallLetters[0].length + numbersAndSpecialCharacters[0].length + 20];
-        copyAllPicturesIntoOne();
+        int[][] capitalLetters = read.readDataFromPicture(fC);
+        int[][] smallLetters = read.readDataFromPicture(fS);
+        int[][] numbersAndSpecialCharacters = read.readDataFromPicture(fN);
+        splitTheDataIntoHashMap(smallLetters,1);
+        splitTheDataIntoHashMap(capitalLetters,27);
+        splitTheDataIntoHashMap(numbersAndSpecialCharacters,53);
     }
 
-    private void copyAllPicturesIntoOne() {
-        int a = 0;
-        for(int i=0;i<smallLetters.length;i++){
-            System.arraycopy(smallLetters[i], a, allAlphabet[i], a, smallLetters[0].length);
-        }
-        a += smallLetters[0].length;
-        for(int i=0;i<capitalLetters.length;i++){
-            System.arraycopy(capitalLetters[i], 0, allAlphabet[i], a, capitalLetters[0].length);
-        }
-        a += capitalLetters[0].length;
-        for(int i=0;i<numbersAndSpecialCharacters.length;i++){
-            System.arraycopy(numbersAndSpecialCharacters[i], 0, allAlphabet[i], a, numbersAndSpecialCharacters[0].length);
-        }
-    }
-
-    void splitTheDataIntoHashMap(){
-        int[][] temp = new int[allAlphabet[0].length/60][allAlphabet.length];
-        int[][] rotated = rotateClockWise(allAlphabet);
-        int indexForKey = 1;
+    private void splitTheDataIntoHashMap(int[][] input,int index){
+        int[][] temp = new int[input.length][100];
+        int[][] rotated = rotateClockWise(input);
+        int indexForKey = index;
         int countForTemp = 0;
         for (int[] value : rotated) {
             int count = 0;
@@ -66,15 +43,64 @@ class Input {
                     continue;
                 }
                 int[][] test = new int[countTillZeroRow(temp)][temp[0].length];
+
                 for (int a = 0; a < test.length; a++) {
                     System.arraycopy(temp[a], 0, test[a], 0, test[a].length);
                 }
-                this.data.put(indexForKey++, rotatePictureAntiClockWise(test));
+
+                int[][] intermediate = rotatePictureAntiClockWise(test);
+                int northToSouth;
+                for(northToSouth=0;northToSouth<intermediate.length;northToSouth++){
+                    if(intermediate[northToSouth][0] == -1){
+                        break;
+                    }
+                }
+
+                int[][] inter = new int[intermediate.length - northToSouth][intermediate[0].length];
+                for(int z=0;z<inter.length;z++){
+                    System.arraycopy(intermediate[northToSouth++],0,inter[z],0,intermediate[0].length);
+                }
+//
+//                int eastToWest;
+//                for(eastToWest = 0;eastToWest<inter[0].length;eastToWest++){
+//                    if(inter[0][eastToWest] != -1){
+//                        break;
+//                    }
+//                }
+//
+//                int[][] lol = new int[inter.length][inter[0].length - eastToWest + 1];
+//                for(int z=0;z<intermediate.length;z++){
+//                    System.arraycopy(inter[eastToWest++],0,lol[z],0,inter[0].length);
+//                }
+
+                this.data.put(indexForKey++, inter);
                 countForTemp = 0;
-                temp = new int[allAlphabet[0].length / 60][allAlphabet.length];
+                verifyTheImage(temp, indexForKey, inter);
+                temp = new int[input.length][300];
             }
         }
-        writeHashMap();
+        generateSpacePicture(indexForKey);
+    }
+
+    private void generateSpacePicture(int indexForKey) {
+        int[][] temp;
+        temp = new int[100][20];
+        for(int i=0;i<temp.length;i++){
+            for(int j=0;j<temp[0].length;j++){
+                temp[i][j] = -1;
+            }
+        }
+        this.data.put(indexForKey,temp);
+    }
+
+    private void verifyTheImage(int[][] temp, int indexForKey, int[][] result) {
+        BufferedImage lol = new BufferedImage(temp.length,temp[0].length,5);
+        for(int a=0;a<result.length;a++){
+            for(int b=0;b<result[0].length;b++){
+                lol.setRGB(b,a,result[a][b]);
+            }
+        }
+        GenerateHandwriting.writeFinalGeneratedImage(lol, String.valueOf(indexForKey-1));
     }
 
     private int countTillZeroRow(int[][] lol){
@@ -117,29 +143,6 @@ class Input {
         return count == (temp.length*temp[0].length);
     }
 
-    private void writeHashMap(){
-        Set<Integer> keys = this.data.keySet();
-        for(int a : keys){
-            //System.out.println(a);
-            //System.out.println(Arrays.deepToString(data.get(a)));
-            BufferedImage write = new BufferedImage(data.get(a)[0].length,data.get(a).length, 5);
-            for(int i=0;i<data.get(a).length;i++){
-                for(int j=0;j<data.get(a)[0].length;j++){
-                    write.setRGB(j,i,data.get(a)[i][j]);
-                }
-            }
-            writeFinalGeneratedImage(write, String.valueOf(a));
-        }
-    }
-
-    private static void writeFinalGeneratedImage(BufferedImage writeImage,String fileName) {
-        File writer = new File("C:\\Users\\vishwanath\\Pictures\\Hand Writing Project\\" + fileName + ".png");
-        try {
-            ImageIO.write(writeImage,"png",writer);
-        } catch (IOException e) {
-            System.out.println("Failed to write the image into destination path ");
-        }
-    }
 
     private static int[][] rotateClockWise(int[][] input){
         int numberOfRows = input.length;
@@ -156,4 +159,5 @@ class Input {
     HashMap<Integer , int[][]> returnData(){
         return this.data;
     }
+
 }

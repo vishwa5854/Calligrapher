@@ -22,7 +22,7 @@ class GenerateHandwriting {
         this.data = d;
         this.textFromFile = new ArrayList<>();
         this.alphabet = new HashMap<>();
-        char[] letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890".toCharArray();
+        char[] letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ".toCharArray();
         for(int i = 0; i< letters.length; i++){
             alphabet.put(letters[i] , i+1);
         }
@@ -46,22 +46,21 @@ class GenerateHandwriting {
     }
 
     private void generateHandWriting(){
-        int[][] outputFile = new int[1920][1080];
-        for(int i=0;i<1920;i++){
-            for(int j=0;j<1080;j++){
+        int[][] outputFile = new int[1080][1920];
+        for(int i=0;i<1080;i++){
+            for(int j=0;j<1920;j++){
                 outputFile[i][j] = -1;
             }
         }
         int indexForI = 10;
-        //int indexForJ = 10;
         for(int i=0;i<textFromFile.get(0).length();i++){
             copyCharacterIntoArray(data.get(alphabet.get(textFromFile.get(0).charAt(i))),indexForI,outputFile);
             System.out.println(Arrays.deepToString(data.get(alphabet.get(textFromFile.get(0).charAt(i)))));
             indexForI += data.get(alphabet.get(textFromFile.get(0).charAt(i)))[i].length+5;
         }
-        BufferedImage write = new BufferedImage(1080,1920 , 5);
-        for(int i=0;i<1920;i++){
-            for(int j=0;j<1080;j++){
+        BufferedImage write = new BufferedImage(1920,1080 , 5);
+        for(int i=0;i<1080;i++){
+            for(int j=0;j<1920;j++){
                 write.setRGB(j,i,outputFile[i][j]);
             }
         }
@@ -74,10 +73,10 @@ class GenerateHandwriting {
         }
     }
 
-    private static void writeFinalGeneratedImage(BufferedImage writeImage, String file) {
-        File writer = new File("C:\\Users\\vishwanath\\Pictures\\Hand Writing Project\\" + file + ".png");
+    static void writeFinalGeneratedImage(BufferedImage writeImage, String file) {
+        File writer = new File("C:\\Users\\vishwanath\\Pictures\\Hand Writing Project\\" + file + ".jpg");
         try {
-            ImageIO.write(writeImage,"png",writer);
+            ImageIO.write(writeImage,"jpg",writer);
         } catch (IOException e) {
             System.out.println("Failed to write the image into destination path ");
         }
