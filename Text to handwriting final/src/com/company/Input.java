@@ -24,7 +24,7 @@ class Input {
     }
 
     private void splitTheDataIntoHashMap(int[][] input,int index){
-        int[][] temp = new int[input.length][100];
+        int[][] temp = new int[input.length][200];
         int[][] rotated = rotateClockWise(input);
         int indexForKey = index;
         int countForTemp = 0;
@@ -55,27 +55,15 @@ class Input {
                         break;
                     }
                 }
-
                 int[][] inter = new int[intermediate.length - northToSouth][intermediate[0].length];
-                for(int z=0;z<inter.length;z++){
-                    System.arraycopy(intermediate[northToSouth++],0,inter[z],0,intermediate[0].length);
+
+                for (int[] ints : inter) {
+                    System.arraycopy(intermediate[northToSouth++], 0, ints, 0, intermediate[0].length);
                 }
-//
-//                int eastToWest;
-//                for(eastToWest = 0;eastToWest<inter[0].length;eastToWest++){
-//                    if(inter[0][eastToWest] != -1){
-//                        break;
-//                    }
-//                }
-//
-//                int[][] lol = new int[inter.length][inter[0].length - eastToWest + 1];
-//                for(int z=0;z<intermediate.length;z++){
-//                    System.arraycopy(inter[eastToWest++],0,lol[z],0,inter[0].length);
-//                }
 
                 this.data.put(indexForKey++, inter);
                 countForTemp = 0;
-                verifyTheImage(temp, indexForKey, inter);
+                verifyTheImage(indexForKey, inter);
                 temp = new int[input.length][300];
             }
         }
@@ -93,8 +81,8 @@ class Input {
         this.data.put(indexForKey,temp);
     }
 
-    private void verifyTheImage(int[][] temp, int indexForKey, int[][] result) {
-        BufferedImage lol = new BufferedImage(temp.length,temp[0].length,5);
+    private void verifyTheImage(int indexForKey, int[][] result) {
+        BufferedImage lol = new BufferedImage(result[0].length,result.length,5);
         for(int a=0;a<result.length;a++){
             for(int b=0;b<result[0].length;b++){
                 lol.setRGB(b,a,result[a][b]);
@@ -155,6 +143,7 @@ class Input {
         }
         return result;
     }
+
 
     HashMap<Integer , int[][]> returnData(){
         return this.data;
