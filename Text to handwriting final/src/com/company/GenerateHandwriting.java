@@ -15,13 +15,11 @@ class GenerateHandwriting {
     private ArrayList<String> textFromFile;
     private HashMap<Character , Integer> alphabet;
     private HashMap<Integer , int[][]> data;
-    private ArrayList<int[][]> inter; // stores the picture arrays of every line in the text file
 
     GenerateHandwriting(String fileName, HashMap<Integer,int[][]> d){
         this.inputFileName = fileName;
         this.data = d;
         this.textFromFile = new ArrayList<>();
-        this.inter = new ArrayList<>();
         this.alphabet = new HashMap<>();
         char[] letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890 ".toCharArray();
         for(int i = 0; i< letters.length; i++){
@@ -49,22 +47,27 @@ class GenerateHandwriting {
     private void generateHandWriting(){
         int[][] out = new int[1080][1920];
         createWhitePaper(out);
+        int row = 0;
         for (String s : textFromFile) {
             int indexForI = 10;
             for (int i = 0; i < s.length(); i++) {
-                copyCharacterIntoArray(data.get(alphabet.get(s.charAt(i))), indexForI, out);
+                copyCharacterIntoArray(data.get(alphabet.get(s.charAt(i))), indexForI, out,row);
                 System.out.println(Arrays.deepToString(data.get(alphabet.get(s.charAt(i)))));
                 indexForI += data.get(alphabet.get(s.charAt(i)))[i].length + 5;
             }
-            this.inter.add(out);
-            out = new int[1080][1920];
-            createWhitePaper(out);
+            row += data.get(alphabet.get(s.charAt(s.length() -1))).length;
         }
-        convertTheArrayListToSingleArray();
-        int a = 100;
-        for(int[][] lol : this.inter) {
-            generateImage(lol,a++);
+        createBufferedImageObject(out);
+    }
+
+    private void createBufferedImageObject(int[][] out) {
+        BufferedImage lol = new BufferedImage(out[0].length,out.length,5);
+        for(int i=0;i<out.length;i++){
+            for(int j=0;j<out[0].length;j++){
+                lol.setRGB(j,i,out[i][j]);
+            }
         }
+        writeFinalGeneratedImage(lol, "Vani");
     }
 
     private void createWhitePaper(int[][] out) {
@@ -75,33 +78,9 @@ class GenerateHandwriting {
         }
     }
 
-    private void generateImage(int[][] input,int fileName) {
-        BufferedImage write = new BufferedImage(input[0].length, input.length, 5);
-        for(int i=0;i<input.length;i++){
-            for(int j=0;j<input[0].length;j++){
-                write.setRGB(j,i,input[i][j]);
-            }
-        }
-        writeFinalGeneratedImage(write, String.valueOf(fileName));
-    }
-
-    private void convertTheArrayListToSingleArray(){
-        int[][] outputFile = new int[1080 * this.inter.size() + 100][1920];
-        int start = 10;
-        for(int[][] lol : this.inter){
-           for(int i=0;i<lol.length;i++){
-               System.arraycopy(lol[i],0, outputFile[start++],0,lol[i].length);
-           }
-           start += 10;
-       }
-
-        generateImage(outputFile,5854);
-    }
-
-    private void copyCharacterIntoArray(int[][] input , int start, int[][] output){
-        for (int i = 0; i < input.length; i++) {
-            int[] ints = input[i];
-            System.arraycopy(ints, 0, output[i], start, ints.length);
+    private void copyCharacterIntoArray(int[][] input , int column, int[][] output,int row){
+        for (int[] ints : input) {
+            System.arraycopy(ints, 0, output[row++], column, ints.length);
         }
     }
 

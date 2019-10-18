@@ -42,7 +42,7 @@ class Input {
                 if (isArrayEmpty(temp)) {
                     continue;
                 }
-                int[][] test = new int[countTillZeroRow(temp)][temp[0].length];
+                int[][] test = new int[countTillNumber(temp,0)][temp[0].length];
 
                 for (int a = 0; a < test.length; a++) {
                     System.arraycopy(temp[a], 0, test[a], 0, test[a].length);
@@ -60,6 +60,21 @@ class Input {
                 for (int[] ints : inter) {
                     System.arraycopy(intermediate[northToSouth++], 0, ints, 0, intermediate[0].length);
                 }
+
+//                int top = countTillNumber(inter , -1);
+//                int[][] anotherPic = new int[inter.length - top][inter[0].length];
+//                for(int i=top;i<inter.length;i++){
+//                    for(int j=0;j<inter[0].length;j++){
+//                        anotherPic[i-top][j] = inter[i][j];
+//                    }
+//                }
+//                int bottom = countTillNumber(anotherPic,-1);
+//                anotherPic = new int[inter.length - top - bottom][inter[0].length];
+//                for(int i=top;i<bottom;i++){
+//                    for(int j=0;j<inter[0].length;j++){
+//                        anotherPic[i-top][j] = inter[i][j];
+//                    }
+//                }
 
                 this.data.put(indexForKey++, inter);
                 countForTemp = 0;
@@ -91,12 +106,12 @@ class Input {
         GenerateHandwriting.writeFinalGeneratedImage(lol, String.valueOf(indexForKey-1));
     }
 
-    private int countTillZeroRow(int[][] lol){
+    private int countTillNumber(int[][] lol,int number){
         int i;
         for(i = 0; i<lol.length; i++){
             int count = 0;
             for(int j=0;j<lol[i].length;j++){
-                if(lol[i][j] == 0){
+                if(lol[i][j] == number){
                     count++;
                 }
             }
