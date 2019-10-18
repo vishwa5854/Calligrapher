@@ -1,5 +1,6 @@
 package com.company;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.HashMap;
 
@@ -42,7 +43,7 @@ class Input {
                 if (isArrayEmpty(temp)) {
                     continue;
                 }
-                int[][] test = new int[countTillNumber(temp,0)][temp[0].length];
+                int[][] test = new int[countTillNumber(temp,0,true)][temp[0].length];
 
                 for (int a = 0; a < test.length; a++) {
                     System.arraycopy(temp[a], 0, test[a], 0, test[a].length);
@@ -61,24 +62,10 @@ class Input {
                     System.arraycopy(intermediate[northToSouth++], 0, ints, 0, intermediate[0].length);
                 }
 
-//                int top = countTillNumber(inter , -1);
-//                int[][] anotherPic = new int[inter.length - top][inter[0].length];
-//                for(int i=top;i<inter.length;i++){
-//                    for(int j=0;j<inter[0].length;j++){
-//                        anotherPic[i-top][j] = inter[i][j];
-//                    }
-//                }
-//                int bottom = countTillNumber(anotherPic,-1);
-//                anotherPic = new int[inter.length - top - bottom][inter[0].length];
-//                for(int i=top;i<bottom;i++){
-//                    for(int j=0;j<inter[0].length;j++){
-//                        anotherPic[i-top][j] = inter[i][j];
-//                    }
-//                }
-
-                this.data.put(indexForKey++, inter);
+                // inter = cutDownTheWhiteBarsInPicture(inter);
+                this.data.put(indexForKey++, changeColor(inter));
                 countForTemp = 0;
-                verifyTheImage(indexForKey, inter);
+                verifyTheImage(indexForKey, changeColor(inter));
                 temp = new int[input.length][300];
             }
         }
@@ -106,7 +93,7 @@ class Input {
         GenerateHandwriting.writeFinalGeneratedImage(lol, String.valueOf(indexForKey-1));
     }
 
-    private int countTillNumber(int[][] lol,int number){
+    private int countTillNumber(int[][] lol,int number,Boolean decision){
         int i;
         for(i = 0; i<lol.length; i++){
             int count = 0;
@@ -115,8 +102,14 @@ class Input {
                     count++;
                 }
             }
-            if(count == lol[i].length){
-                break;
+            if(decision) {
+                if (count == lol[i].length) {
+                    break;
+                }
+            }else {
+                if (count != lol[i].length) {
+                    break;
+                }
             }
         }
         return i;
@@ -162,6 +155,34 @@ class Input {
 
     HashMap<Integer , int[][]> returnData(){
         return this.data;
+    }
+
+
+//    private int[][] cutDownTheWhiteBarsInPicture(int[][] input){
+//        int top = countTillNumber(input,-1,false);
+//        int[][] temp = new int[input.length - top][input[0].length];
+//        for(int i=top;i<input.length;i++){
+//            System.arraycopy(input[i],0,temp[i-top],0,input[i].length);
+//        }
+//        int bottom = temp.length - countTillNumber(input,-1,false);
+//        int[][] result = new int[input.length - top - bottom][input[0].length];
+//        for(int i=top;i<bottom;i++){
+//            System.arraycopy(input[i],0,result[i-top],0,input[i].length);
+//        }
+//        return temp;
+//    }
+
+    private int[][] changeColor(int[][] input){
+        Color color = new Color(71, 91, 255);
+        int colorRequired = color.getRGB();
+        for(int i=0;i<input.length;i++){
+            for(int j=0;j<input[0].length;j++){
+                if(input[i][j] != -1){
+                    input[i][j] = colorRequired;
+                }
+            }
+        }
+        return input;
     }
 
 }
