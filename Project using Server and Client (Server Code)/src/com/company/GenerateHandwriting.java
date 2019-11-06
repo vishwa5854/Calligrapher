@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Set;
 
 class GenerateHandwriting {
 
@@ -35,9 +34,10 @@ class GenerateHandwriting {
     }
 
     private void extractTextAndSetIntoStringArray(){
-        for(int i=0;i<this.input.length();i += 40){
+        for(int i=0;i<this.input.length();i += 55){
             if(i+40 < this.input.length()) {
-                this.textFromFile.add(this.input.substring(i, i+40));
+                this.textFromFile.add(this.input.substring(i, i+55));
+
             }
             else {
                 this.textFromFile.add(this.input.substring(i,this.input.length()-1));
@@ -45,16 +45,6 @@ class GenerateHandwriting {
         }
     }
 
-    private int getTheMaxWidthOfArray(){
-        Set<Integer> keys = this.data.keySet();
-        int max = this.data.get(1)[0].length;
-        for(int key : keys){
-            if(this.data.get(key)[0].length > max){
-                max = this.data.get(key)[0].length;
-            }
-        }
-        return max;
-    }
 
     private int[][] generateHandWriting(){
         int[][] out = new int[1080][1920];
@@ -69,7 +59,7 @@ class GenerateHandwriting {
             }
             row += data.get(alphabet.get(s.charAt(s.length() -1))).length;
         }
-        return out;
+        return Input.rotatePictureAntiClockWise(out);
     }
 
     static void writeFinalGeneratedImage(BufferedImage writeImage, String file) {

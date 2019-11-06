@@ -47,7 +47,7 @@ class Input {
                 if (isArrayEmpty(temp)) {
                     continue;
                 }
-                int[][] test = new int[countTillNumber(temp,0,true)][temp[0].length];
+                int[][] test = new int[countTillNumber(temp)][temp[0].length];
 
                 for (int a = 0; a < test.length; a++) {
                     System.arraycopy(temp[a], 0, test[a], 0, test[a].length);
@@ -66,7 +66,6 @@ class Input {
                     System.arraycopy(intermediate[northToSouth++], 0, ints, 0, intermediate[0].length);
                 }
 
-                // inter = cutDownTheWhiteBarsInPicture(inter);
                 this.data.put(indexForKey++, changeColor(inter));
                 countForTemp = 0;
                 verifyTheImage(indexForKey, changeColor(inter));
@@ -99,29 +98,23 @@ class Input {
         GenerateHandwriting.writeFinalGeneratedImage(lol, String.valueOf(indexForKey-1));
     }
 
-    private int countTillNumber(int[][] lol,int number,Boolean decision){
+    private int countTillNumber(int[][] lol){
         int i;
         for(i = 0; i<lol.length; i++){
             int count = 0;
             for(int j=0;j<lol[i].length;j++){
-                if(lol[i][j] == number){
+                if(lol[i][j] == 0){
                     count++;
                 }
             }
-            if(decision) {
-                if (count == lol[i].length) {
-                    break;
-                }
-            }else {
-                if (count != lol[i].length) {
-                    break;
-                }
+            if (count == lol[i].length) {
+                break;
             }
         }
         return i;
     }
 
-    private static int[][] rotatePictureAntiClockWise(int[][] input){
+      static int[][] rotatePictureAntiClockWise(int[][] input){
         int numberOfRows = input.length;
         int numberOfColumns = input[0].length;
         int[][] result = new int[numberOfColumns][numberOfRows];
@@ -164,22 +157,8 @@ class Input {
     }
 
 
-//    private int[][] cutDownTheWhiteBarsInPicture(int[][] input){
-//        int top = countTillNumber(input,-1,false);
-//        int[][] temp = new int[input.length - top][input[0].length];
-//        for(int i=top;i<input.length;i++){
-//            System.arraycopy(input[i],0,temp[i-top],0,input[i].length);
-//        }
-//        int bottom = temp.length - countTillNumber(input,-1,false);
-//        int[][] result = new int[input.length - top - bottom][input[0].length];
-//        for(int i=top;i<bottom;i++){
-//            System.arraycopy(input[i],0,result[i-top],0,input[i].length);
-//        }
-//        return temp;
-//    }
-
     private int[][] changeColor(int[][] input){
-        Color color = new Color(71, 91, 255);
+        Color color = new Color(93, 154, 255);
         int colorRequired = color.getRGB();
         for(int i=0;i<input.length;i++){
             for(int j=0;j<input[0].length;j++){
