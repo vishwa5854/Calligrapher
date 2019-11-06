@@ -54,7 +54,7 @@ class GenerateHandwriting {
             int indexForI = 10;
             for (int i = 0; i < s.length(); i++) {
                 copyCharacterIntoArray(data.get(alphabet.get(s.charAt(i))), indexForI, out,row);
-                System.out.println(Arrays.deepToString(data.get(alphabet.get(s.charAt(i)))));
+                //System.out.println(Arrays.deepToString(data.get(alphabet.get(s.charAt(i)))));
                 indexForI += data.get(alphabet.get(s.charAt(i)))[i].length + 5;
             }
             row += data.get(alphabet.get(s.charAt(s.length() -1))).length;
