@@ -1,3 +1,2 @@
-# Convert-Text-to-handwriting
-Constructs handwriting of an individual out of pictures for the given corresponding text
-Right now you have to read the client and server code as it is the latest commit
+# Calligrapher
+The core idea behind this project is generating the handwriting of an individual from the pictures of one's handwriting, this brings a personal touch to what you write, oftentimes we encounter prominent books which are handwritten this project symbolizes its significance.
